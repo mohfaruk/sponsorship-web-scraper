@@ -58,7 +58,7 @@ const App = () => {
                     </Button>
                 </div>
 
-                <div className="advancedSearch">
+                <div className="advancedSearch text-bold">
                     <div>
                         Advanced Search
                         <Button onClick={toggleAdvancedSearch} className="arrowButton">
@@ -94,7 +94,7 @@ const App = () => {
                 {displayResult && (
                     <>
                         <div className="result">
-                            <div className='resultsHeader'>Results</div>
+                            <div className='resultsHeader text-bold'>Results</div>
                             <div className="cardGroup">
                                 {/* Example result cards */}
                                 <div className="resultCard">

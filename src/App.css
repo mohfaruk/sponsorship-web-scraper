@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Londrina+Outline&display=swap');
+
 body {
   display: flex;
   justify-content: center;
@@ -6,10 +8,24 @@ body {
   color: #fff;
 }
 
+.londrina-outline-regular {
+  font-family: "Londrina Outline", sans-serif;
+  font-weight: bold;
+  font-style: normal;
+}
+
+.text-bold {
+  font-weight: bold;
+}
+
 .App {
   height: 100vh;
   display: flex;
   flex-direction: column;
+}
+
+.searchBarTitle {
+  font-size: 4rem;
 }
 
 .searchBar {
