@@ -95,3 +95,7 @@ body {
   object-fit: contain; /* Scale the image to cover the space, maintaining aspect ratio */
   border-radius: 4px; 
 }
+
+/* .MuiSelect-select {
+  color: white;
+} */
