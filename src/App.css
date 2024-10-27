@@ -18,6 +18,10 @@ body {
   font-weight: bold;
 }
 
+.text-white {
+  color: #fff;
+}
+
 .App {
   height: 100vh;
   display: flex;
@@ -35,7 +39,8 @@ body {
 
 .searchBar button{
   margin-left: 1vw;
-  
+  margin-top: 1px;
+  padding: 15px;
 }
 
 .searchBar input {

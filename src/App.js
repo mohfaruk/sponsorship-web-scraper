@@ -1,163 +1,203 @@
-import React from 'react';
-import './App.css';
-import { Button } from '@mui/material'; 
-import TextField from '@mui/material/TextField';
-import Header from './components/Header'; 
-import json from './web-scraper/sponsors_readable.json'
+import React, { useState } from "react";
+import "./App.css";
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  CardMedia,
+  Container,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Stack,
+  Typography,
+} from "@mui/material";
+import TextField from "@mui/material/TextField";
+import Header from "./components/Header";
+import ArrowDownwardOutlinedIcon from "@mui/icons-material/ArrowDownwardOutlined";
+import ArrowUpwardOutlinedIcon from "@mui/icons-material/ArrowUpwardOutlined";
 
 const App = () => {
-    const [searchBar, setSearchBar] = React.useState("");
-    const [isExpanded, setIsExpanded] = React.useState(false);
-    const [displayResult, setDisplayResult] = React.useState(true); // Check to false for default
-    
-    //const [json, setData]= React.useState(null);
-    const [searchedResult, setSearchedResult] = React.useState("");
-    const [filteredData, setFilteredData] = React.useState(null);
+  const [searchBar, setSearchBar] = useState("");
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [displayResult, setDisplayResult] = useState(true); // Check to false for default
 
-    const toggleAdvancedSearch = () => {
-        setIsExpanded(!isExpanded);
-    };
+  const toggleAdvancedSearch = () => {
+    setIsExpanded(!isExpanded);
+  };
 
-    const setInput = (e) => {
-        setSearchBar(e.target.value);
-    };
+  const setInput = (e) => {
+    setSearchBar(e.target.value);
+  };
 
-    const searchSponsors = () => {
-        // Implement your API calls here
-        /* fetch('/sponsors.json')
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
+  const searchSponsors = () => {
+    // Implement your API calls here
+    console.log("Searching for sponsors:", searchBar);
+  };
 
-          return response.json();
-        })
-        .then((jsonData) => {
-            console.log(searchedResult);
-            setData(jsonData);
-        })
-        .catch((error) => console.error('Error fetching data:', error)); */
-        console.log(json);
-    };
+  return (
+    <Container maxWidth>
+      <Header />
+      <main>
+        <Stack direction="row" spacing={2} className="searchBar">
+          <TextField
+            type="search"
+            id="search"
+            name="search"
+            label="Search sponsor..."
+            value={searchBar}
+            onChange={setInput}
+            variant="outlined"
+            fullWidth
+            sx={{
+              "& .MuiInputBase-input": {
+                color: "white", // Text color
+              },
+              "& .MuiInputLabel-root": {
+                color: "white", // Label color
+              },
+              "& .MuiOutlinedInput-notchedOutline": {
+                borderColor: "white", // Border color for outlined variant
+              },
+            }}
+          />
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={searchSponsors}
+            disabled={!searchBar}
+            sx={{ backgroundColor: "#228B56" }}
+          >
+            Search
+          </Button>
+        </Stack>
 
-    const displayFilteredData = (i) => {
-        return (
-            <div className="cardGroup">
-            {filteredData.slice(i, i+2).map((data) =>
-                (
-                    <div className="resultCard">
-                        <div>{data["name"]}</div>
-                        <img className="logo" src={data["logo"]}></img>
-                        <Button variant="contained" sx={{ backgroundColor: '#228B56'}}>More info</Button>
-                    </div>
-                )
-            )}
-            </div>
-            
-        )
-    }
-    const filterData = (lowercasedQuery) => {
-        
-        const filtered = json.filter(item => 
-            item['name'].toLowerCase().includes(lowercasedQuery) ||
-            item['keywords'].some(keyword => keyword.toLowerCase().includes(lowercasedQuery)) ||
-            item['locations'].some(location => location.toLowerCase().includes(lowercasedQuery)) ||
-            item['participants_num']/item['hackathon_num'] <= parseInt(lowercasedQuery)+parseInt(lowercasedQuery)*0.5
-        );
-        setFilteredData(filtered);
-        console.log(filtered);
-    }
+        <Stack className="advancedSearch text-bold">
+          <Button
+            component="label"
+            variant="text"
+            endIcon={
+              isExpanded ? (
+                <ArrowUpwardOutlinedIcon />
+              ) : (
+                <ArrowDownwardOutlinedIcon />
+              )
+            }
+            onClick={toggleAdvancedSearch}
+          >
+            Advanced Search
+          </Button>
 
-    React.useEffect(searchSponsors, []);
-    
-    React.useEffect(() => {
-        const lowercasedQuery = searchedResult.toLowerCase().split(",");
-        lowercasedQuery.forEach((query) => filterData(query));
-        
+          {isExpanded && (
+            <Stack direction="column" spacing={2}>
+              <FormControl fullWidth>
+                <InputLabel id="number" sx={{ color: 'white' }}>Number of attendees</InputLabel>
+                <Select
+                  labelId="number"
+                  id="number"
+                  label="Number of attendees"
+                  sx={{
+                    '& .MuiOutlinedInput-notchedOutline': {
+                        borderColor: 'white', 
+                        color: 'white', // Set text color to white
+                    },
+                    '&:hover .MuiOutlinedInput-notchedOutline': {
+                        borderColor: 'white', 
+                        color: 'white', // Set text color to white
+                    },
+                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                        borderColor: 'white', 
+                        color: 'white', // Set text color to white
+                    },
+                }}
+                  //   onChange={}
+                >
+                  <MenuItem>Put your JSON here</MenuItem>
+                </Select>
+              </FormControl>
+              <FormControl fullWidth>
+                <InputLabel id="format" sx={{ color: 'white' }}>In-person/online</InputLabel>
+                <Select labelId="format" id="format" label="Format"  sx={{
+                    '& .MuiOutlinedInput-notchedOutline': {
+                        borderColor: 'white', 
+                        color: 'white', // Set text color to white
+                    },
+                    '&:hover .MuiOutlinedInput-notchedOutline': {
+                        borderColor: 'white', 
+                        color: 'white', // Set text color to white
+                    },
+                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                        borderColor: 'white', 
+                        color: 'white', // Set text color to white
+                    },
+                }}>
+                  <MenuItem>Put your JSON here</MenuItem>
+                </Select>
+              </FormControl>
+              <FormControl fullWidth>
+                <InputLabel id="location" sx={{ color: 'white' }}>Location</InputLabel>
+                <Select labelId="location" id="location" label="Location"  sx={{
+                    '& .MuiOutlinedInput-notchedOutline': {
+                        borderColor: 'white', 
+                        color: 'white', // Set text color to white
+                    },
+                    '&:hover .MuiOutlinedInput-notchedOutline': {
+                        borderColor: 'white', 
+                        color: 'white', // Set text color to white
+                    },
+                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                        borderColor: 'white', 
+                        color: 'white', // Set text color to white
+                    },
+                }}>
+                  <MenuItem>Put your JSON here</MenuItem>
+                </Select>
+              </FormControl>
+            </Stack>
+          )}
+        </Stack>
 
-    }, [searchedResult]);
-    return (
-        <div className="App">
-            <Header />
-            <main>
-                <div className="searchBar">
-                    <TextField
-                        type="search"
-                        id="search"
-                        name="search"
-                        label="Search sponsor..."
-                        value={searchBar}
-                        onChange={setInput}
-                        variant="outlined"
-                        sx={{
-                          '& .MuiInputBase-input': {
-                              color: 'white', // Text color
-                          },
-                          '& .MuiInputLabel-root': {
-                              color: 'white', // Label color
-                          },
-                          '& .MuiOutlinedInput-notchedOutline': {
-                            borderColor: 'white', // Border color for outlined variant
-                        },
-                        }}
-                    />
-                    <Button 
-                        variant="contained" 
-                        color="primary" 
-                        onClick={() => {setSearchedResult(searchBar);}} 
-                        disabled={!searchBar}
-                        sx={{ backgroundColor: '#228B56'}}
+        {displayResult && (
+          <>
+            <Stack direction="column" spacing={2}>
+              <Typography className="resultsHeader text-bold">
+                Results
+              </Typography>
+              <Box className="cardGroup">
+                <Card className="resultCard">
+                  <CardMedia image={<ArrowDownwardOutlinedIcon />} />
+                  <CardContent>
+                    <Typography>Sponsor Name 1</Typography>
+                    <Button
+                      variant="contained"
+                      sx={{ backgroundColor: "#228B56" }}
                     >
-                        Search
+                      More info
                     </Button>
-                </div>
-                
-                <div className="advancedSearch text-bold">
-                    <div>
-                        Advanced Search
-                        <Button onClick={toggleAdvancedSearch} className="arrowButton">
-                            {isExpanded ? '▲' : '▼'}
-                        </Button>
-                    </div>
-                    {isExpanded && (
-                        <>
-                            <div className="optionGroup">
-                                <label htmlFor="number">Number of attendees</label>
-                                <select name="number" id="number">
-                                    <option>0 - 50</option>
-                                    <option>50 - 100</option>
-                                    <option>100 - 1000</option>
-                                    <option>1000+</option>
+                  </CardContent>
+                </Card>
 
-                                </select>
-                            </div>
-
-                            <div className="optionGroup">
-                                <label htmlFor="format">In-person/online</label>
-                                <select name="format" id="format">
-                                    <option>In-Person</option>
-                                    <option>Online</option>
-                                </select>
-                            </div>
-
-                            
-                        </>
-                    )}
-                </div>
-                
-                {displayResult && (
-                    <>
-                        <div className="result">
-                            <div className='resultsHeader text-bold'>Results</div>
-                                {filteredData && displayFilteredData(0)}
-                                {filteredData && displayFilteredData(20)}
-                                {filteredData && displayFilteredData(40)}
-                        </div>
-                    </>
-                )}
-            </main>
-        </div>
-    );
+                <Card className="resultCard">
+                  <CardMedia image={<ArrowDownwardOutlinedIcon />} />
+                  <CardContent>
+                    <Typography>Sponsor Name 2</Typography>
+                    <Button
+                      variant="contained"
+                      sx={{ backgroundColor: "#228B56" }}
+                    >
+                      More info
+                    </Button>
+                  </CardContent>
+                </Card>
+              </Box>
+            </Stack>
+          </>
+        )}
+      </main>
+    </Container>
+  );
 };
 
 export default App;
