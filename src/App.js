@@ -3,11 +3,16 @@ import './App.css';
 import { Button } from '@mui/material'; 
 import TextField from '@mui/material/TextField';
 import Header from './components/Header'; 
+import json from './web-scraper/sponsors_readable.json'
 
 const App = () => {
     const [searchBar, setSearchBar] = React.useState("");
     const [isExpanded, setIsExpanded] = React.useState(false);
     const [displayResult, setDisplayResult] = React.useState(true); // Check to false for default
+    
+    //const [json, setData]= React.useState(null);
+    const [searchedResult, setSearchedResult] = React.useState("");
+    const [filteredData, setFilteredData] = React.useState(null);
 
     const toggleAdvancedSearch = () => {
         setIsExpanded(!isExpanded);
@@ -19,9 +24,58 @@ const App = () => {
 
     const searchSponsors = () => {
         // Implement your API calls here
-        console.log("Searching for sponsors:", searchBar);
+        /* fetch('/sponsors.json')
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+
+          return response.json();
+        })
+        .then((jsonData) => {
+            console.log(searchedResult);
+            setData(jsonData);
+        })
+        .catch((error) => console.error('Error fetching data:', error)); */
+        console.log(json);
     };
 
+    const displayFilteredData = (i) => {
+        return (
+            <div className="cardGroup">
+            {filteredData.slice(i, i+2).map((data) =>
+                (
+                    <div className="resultCard">
+                        <div>{data["name"]}</div>
+                        <img className="logo" src={data["logo"]}></img>
+                        <Button variant="contained" sx={{ backgroundColor: '#228B56'}}>More info</Button>
+                    </div>
+                )
+            )}
+            </div>
+            
+        )
+    }
+    const filterData = (lowercasedQuery) => {
+        
+        const filtered = json.filter(item => 
+            item['name'].toLowerCase().includes(lowercasedQuery) ||
+            item['keywords'].some(keyword => keyword.toLowerCase().includes(lowercasedQuery)) ||
+            item['locations'].some(location => location.toLowerCase().includes(lowercasedQuery)) ||
+            item['participants_num']/item['hackathon_num'] <= parseInt(lowercasedQuery)+parseInt(lowercasedQuery)*0.5
+        );
+        setFilteredData(filtered);
+        console.log(filtered);
+    }
+
+    React.useEffect(searchSponsors, []);
+    
+    React.useEffect(() => {
+        const lowercasedQuery = searchedResult.toLowerCase().split(",");
+        lowercasedQuery.forEach((query) => filterData(query));
+        
+
+    }, [searchedResult]);
     return (
         <div className="App">
             <Header />
@@ -50,14 +104,14 @@ const App = () => {
                     <Button 
                         variant="contained" 
                         color="primary" 
-                        onClick={searchSponsors} 
+                        onClick={() => {setSearchedResult(searchBar);}} 
                         disabled={!searchBar}
                         sx={{ backgroundColor: '#228B56'}}
                     >
                         Search
                     </Button>
                 </div>
-
+                
                 <div className="advancedSearch text-bold">
                     <div>
                         Advanced Search
@@ -70,42 +124,34 @@ const App = () => {
                             <div className="optionGroup">
                                 <label htmlFor="number">Number of attendees</label>
                                 <select name="number" id="number">
-                                    {/* Add options here */}
+                                    <option>0 - 50</option>
+                                    <option>50 - 100</option>
+                                    <option>100 - 1000</option>
+                                    <option>1000+</option>
+
                                 </select>
                             </div>
 
                             <div className="optionGroup">
                                 <label htmlFor="format">In-person/online</label>
                                 <select name="format" id="format">
-                                    {/* Add options here */}
+                                    <option>In-Person</option>
+                                    <option>Online</option>
                                 </select>
                             </div>
 
-                            <div className="optionGroup">
-                                <label htmlFor="location">Location</label>
-                                <select name="location" id="location">
-                                    {/* Add options here */}
-                                </select>
-                            </div>
+                            
                         </>
                     )}
                 </div>
-
+                
                 {displayResult && (
                     <>
                         <div className="result">
                             <div className='resultsHeader text-bold'>Results</div>
-                            <div className="cardGroup">
-                                {/* Example result cards */}
-                                <div className="resultCard">
-                                    <div>Sponsor Name 1</div>
-                                    <Button variant="contained" sx={{ backgroundColor: '#228B56'}}>More info</Button>
-                                </div>
-                                <div className="resultCard">
-                                    <div>Sponsor Name 2</div>
-                                    <Button variant="contained" sx={{ backgroundColor: '#228B56'}}>More info</Button>
-                                </div>
-                            </div>
+                                {filteredData && displayFilteredData(0)}
+                                {filteredData && displayFilteredData(20)}
+                                {filteredData && displayFilteredData(40)}
                         </div>
                     </>
                 )}

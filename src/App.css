@@ -29,9 +29,13 @@ body {
 }
 
 .searchBar {
-  display: flex;
   margin-bottom: 1rem;
   border-radius: 5px;
+}
+
+.searchBar button{
+  margin-left: 1vw;
+  
 }
 
 .searchBar input {
@@ -58,6 +62,7 @@ body {
   display: flex;
   flex-direction: row;
   gap: 20px;
+  width: 50vw;
 }
 
 .resultsHeader {
@@ -71,8 +76,17 @@ body {
   border: 5px solid #FFFDD0;
   border-radius: 5px;
   padding: 20px;
+  width: 50%;
 }
 
 .resultCard {
   text-align: center;
+  margin-bottom: 2%;
+}
+
+.logo{
+  width: 100%; /* Make the image fill the card width */
+  height: 150px; /* Set a specific height for the image */
+  object-fit: contain; /* Scale the image to cover the space, maintaining aspect ratio */
+  border-radius: 4px; 
 }
