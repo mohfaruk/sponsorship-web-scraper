@@ -4,12 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-      "predeploy": "npm run build",
-      "deploy": "gh-pages -d build"
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
   },
   "author": "",
   "license": "ISC",
   "homepage": "https://fundyourhack.github.io/final-design"
-  
 }
