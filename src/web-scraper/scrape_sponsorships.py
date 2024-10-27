@@ -157,10 +157,20 @@ def add_sponsors(data):
         json.dump(all_sponsors, file, indent=4)
     return 
 
+def make_json_file_good():
+    new_json = {"sponsors" : []}
+    with open('src/web-scraper/sponsors.json', 'r') as file:
+        old_json = json.load(file)
+        for key in old_json.keys():
+            new_json['sponsors'].append(old_json[key])
+        file.close()
+    print(new_json)
+        
+
 if __name__ == '__main__':
     #scrape_devpost()
-       
-    with open("Sponsorship-Web-Scraper/sponsor_urls.txt", 'r') as file:
+    make_json_file_good()
+    """ with open("Sponsorship-Web-Scraper/sponsor_urls.txt", 'r') as file:
         urls = file.read().split('\n')
         file.close()
     
@@ -169,4 +179,4 @@ if __name__ == '__main__':
         r = scrape_individual_hackathon(url)
         if  not r or not r['sponsors'] :
             continue
-        add_sponsors(r)
+        add_sponsors(r) """
